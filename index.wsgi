@@ -5,9 +5,7 @@ import web
 
 from weixinInterface import WeixinInterface
 
-urls = (
-'/weixin','WeixinInterface'
-)
+urls = ('/weixin','WeixinInterface')
 
 app_root = os.path.dirname(__file__)
 templates_root = os.path.join(app_root, 'templates')
