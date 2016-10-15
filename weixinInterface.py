@@ -23,7 +23,7 @@ class WeixinInterface:
         nonce=data.nonce
         echostr=data.echostr
         #自己的token
-        token="token" #这里填写在微信公众平台里输入的token
+        token="running" #这里填写在微信公众平台里输入的token
         #字典序排序
         list=[token,timestamp,nonce]
         list.sort()
