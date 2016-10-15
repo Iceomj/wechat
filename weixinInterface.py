@@ -1,10 +1,12 @@
 ﻿# -*- coding: utf-8 -*-
 import hashlib
 import web
-from lxml import etree
+import lxml
 import time
 import os
-
+import json
+import urllib
+from lxml import etree
 
 class WeixinInterface:
 
@@ -19,30 +21,36 @@ class WeixinInterface:
         signature=data.signature
         timestamp=data.timestamp
         nonce=data.nonce
-        echostr = data.echostr
+        echostr=data.echostr
         #自己的token
-        token="token" #这里改写你在微信公众平台里输入的token
+        token="token" #这里填写在微信公众平台里输入的token
         #字典序排序
         list=[token,timestamp,nonce]
         list.sort()
         sha1=hashlib.sha1()
         map(sha1.update,list)
         hashcode=sha1.hexdigest()
-        #sha1加密算法
+        #sha1加密算法        
 
         #如果是来自微信的请求，则回复echostr
         if hashcode == signature:
             return echostr
-	def POST(self): 
-		str_xml = web.data() #获得post来的数据 
-		xml = etree.fromstring(str_xml)#进行XML解析 
-		msgType=xml.find("MsgType").text 
-		fromUser=xml.find("FromUserName").text 
-		toUser=xml.find("ToUserName").text 
-		if msgType == 'text':
-			content=xml.find("Content").text
-			return self.render.reply_text(fromUser,toUser,int(time.time()), content)
-		elif msgType == 'image':
-			pass
-		else:
-			pass
+    
+    def POST(self):
+        str_xml = web.data() #获得post来的数据
+        xml = etree.fromstring(str_xml)#进行XML解析
+        mstype = xml.find("MsgType").text
+        fromUser = xml.find("FromUserName").text
+        toUser = xml.find("ToUserName").text
+        
+        if mstype == 'text':
+            content = xml.find("Content").text#获得用户所输入的内容
+            key = '#####################' ###图灵机器人的key 
+            api = 'http://www.tuling123.com/openapi/api?key=' + key + '&info='  
+            info = content.encode('UTF-8') 
+            url = api + info  
+            page = urllib.urlopen(url)  
+            html = page.read() 
+            dic_json = json.loads(html)  
+            reply_content = dic_json['text']
+            return self.render.reply_text(fromUser,toUser,int(time.time()),reply_content)
