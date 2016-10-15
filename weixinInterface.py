@@ -45,7 +45,7 @@ class WeixinInterface:
         
         if mstype == 'text':
             content = xml.find("Content").text#获得用户所输入的内容
-            key = '#####################' ###图灵机器人的key 
+            key = '92a2853fa94b4d1ab07a855468c7ef85' ###图灵机器人的key 
             api = 'http://www.tuling123.com/openapi/api?key=' + key + '&info='  
             info = content.encode('UTF-8') 
             url = api + info  
